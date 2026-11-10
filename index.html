@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="英数学館 測定">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>英数学館 測定入力</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;background:#F4F5FB;color:#16134A;font:17px/1.6 -apple-system,"Hiragino Sans",sans-serif;text-align:center}</style>
+</head><body><p id="msg">読み込んでいます…</p>
+<script>
+// 英数学館 測定入力（アプリ版の入口）
+// 画面の本体は Apps Script から受け取り、この iPad に覚えておく。電波がないときは覚えておいた画面で開く。
+(function () {
+  var EXEC = "https://script.google.com/macros/s/AKfycbyM5ll6GPKGFFGAgl7ZHFAfY0VKlPygGd27AttybHCfgcMVIR_V-Pav5uF_F5H9T8fOaQ/exec";
+  var KEY = "eisu_page_v1";
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+  var cached = null; try { cached = localStorage.getItem(KEY); } catch (e) {}
+  var shown = false;
+  function show(h) {
+    if (shown) return; shown = true;
+    document.open(); document.write(h); document.close();
+    // ホーム画面に追加したときのアイコン・名前（書き換えたあとの画面にも付ける）
+    var head = document.head || document.getElementsByTagName("head")[0];
+    [["link", {rel: "manifest", href: "manifest.json"}], ["link", {rel: "apple-touch-icon", href: "icon-180.png"}],
+     ["meta", {name: "apple-mobile-web-app-capable", content: "yes"}], ["meta", {name: "apple-mobile-web-app-title", content: "英数学館 測定"}]]
+      .forEach(function (t) { var el = document.createElement(t[0]); for (var k in t[1]) el.setAttribute(k, t[1][k]); head.appendChild(el); });
+  }
+  // 覚えている画面があれば、4秒待っても新しい画面が来ないときはそれで開く
+  var timer = cached ? setTimeout(function () { show(cached); }, 4000) : null;
+  fetch(EXEC + "?action=page&t=" + Date.now())
+    .then(function (r) { if (!r.ok) throw 0; return r.text(); })
+    .then(function (h) {
+      if (h.indexOf("英数学館 体力測定") < 0) throw 0;
+      try { localStorage.setItem(KEY, h); } catch (e) {}
+      if (timer) clearTimeout(timer); show(h);
+    })
+    .catch(function () {
+      if (timer) clearTimeout(timer);
+      if (cached) show(cached);
+      else document.getElementById("msg").textContent = "はじめて開くときは、電波のある場所で開いてください。";
+    });
+})();
+</script>
+</body></html>

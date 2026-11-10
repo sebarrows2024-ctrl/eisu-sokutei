@@ -1,0 +1,13 @@
+{
+  "name": "英数学館 測定入力",
+  "short_name": "英数学館 測定",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F5FB",
+  "theme_color": "#16134A",
+  "icons": [
+    {"src": "icon-180.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
