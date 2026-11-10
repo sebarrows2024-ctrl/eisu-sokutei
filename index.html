@@ -14,6 +14,13 @@
 (function () {
   var EXEC = "https://script.google.com/macros/s/AKfycbyM5ll6GPKGFFGAgl7ZHFAfY0VKlPygGd27AttybHCfgcMVIR_V-Pav5uF_F5H9T8fOaQ/exec";
   var KEY = "eisu_page_v1";
+  // QRコードのアドレスに付けた合言葉（#k=6けた）を覚えて、アドレスからは消す
+  var mk = /[#&?]k=(\d{6})/.exec(location.hash + "&" + location.search);
+  if (mk) {
+    try { localStorage.setItem("eisu_pin", mk[1]); } catch (e) {}
+    window.EISU_PIN = mk[1];
+    try { history.replaceState(null, "", location.pathname); } catch (e) {}
+  }
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
   var cached = null; try { cached = localStorage.getItem(KEY); } catch (e) {}
   var shown = false;

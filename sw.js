@@ -1,5 +1,5 @@
 // 英数学館 測定入力：電波がなくても入口の画面を開けるように、入口のファイルを iPad に置いておく
-const CACHE = "eisu-shell-v1";
+const CACHE = "eisu-shell-v2";
 const FILES = ["./", "index.html", "manifest.json", "icon-180.png", "icon-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => {
